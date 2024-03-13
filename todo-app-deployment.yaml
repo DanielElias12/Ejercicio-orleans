@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app
+spec:
+  replicas: 3  
+  selector:
+    matchLabels:
+      app: todo-app
+  template:
+    metadata:
+      labels:
+        app: todo-app
+    spec:
+      containers:
+      - name: todo-app
+        image: tu_usuario/todo-app:latest 
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-app
+spec:
+  selector:
+    app: todo-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer  # Agregando el load Balancer
